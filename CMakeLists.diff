@@ -34,7 +34,7 @@
  endif()
  if(SDL_POWER)
    file(GLOB POWER_SOURCES ${SDL2_SOURCE_DIR}/src/power/*.c)
-@@ -838,7 +849,11 @@
+@@ -838,9 +849,14 @@
    endif()
    if(SDL_JOYSTICK)
      set(SDL_JOYSTICK_ANDROID 1)
@@ -46,8 +46,11 @@
 +      ${SDL2_SOURCE_DIR}/src/joystick/steam/*.c)
      set(SOURCE_FILES ${SOURCE_FILES} ${ANDROID_JOYSTICK_SOURCES})
      set(HAVE_SDL_JOYSTICK TRUE)
++    install(FILES ${SDL2_SOURCE_DIR}/src/hidapi/hidapi/hidapi.h DESTINATION include/hidapi)
    endif()
-@@ -1482,7 +1497,7 @@
+   if(SDL_LOADSO)
+     set(SDL_LOADSO_DLOPEN 1)
+@@ -1482,7 +1498,7 @@
      find_library(IOKIT IOKit)
      list(APPEND EXTRA_LIBS ${IOKIT})
    endif()
@@ -56,7 +59,7 @@
      find_library(FORCEFEEDBACK ForceFeedback)
      list(APPEND EXTRA_LIBS ${FORCEFEEDBACK})
    endif()
-@@ -1621,8 +1636,18 @@
+@@ -1621,8 +1637,18 @@
  #   endif()
  # endif()
  
@@ -77,7 +80,7 @@
  
  # Prepare the flags and remove duplicates
  if(EXTRA_LDFLAGS)
-@@ -1734,8 +1759,20 @@
+@@ -1734,8 +1760,20 @@
  add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
  target_include_directories(SDL2main PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
  set(_INSTALL_LIBS "SDL2main")
@@ -100,7 +103,7 @@
  endif()
  
  if(SDL_SHARED)
-@@ -1764,8 +1801,9 @@
+@@ -1764,8 +1802,9 @@
    set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
    target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2 PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
@@ -112,7 +115,7 @@
    endif()
  endif()
  
-@@ -1790,8 +1828,9 @@
+@@ -1790,8 +1829,9 @@
    set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
    target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2-static PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
