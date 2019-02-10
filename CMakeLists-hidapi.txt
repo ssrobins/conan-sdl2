@@ -1,0 +1,27 @@
+set(target_name hidapi)
+
+# Temporary
+message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+
+if(ANDROID)
+  set(HIDAPI_SOURCES android/hid.cpp)
+elseif(IOS)
+  set(HIDAPI_SOURCES ios/hid.m)
+elseif(APPLE)
+  set(HIDAPI_SOURCES mac/hid.c)
+elseif(UNIX)
+  set(HIDAPI_SOURCES linux/hid.c)
+elseif(WIN32)
+  set(HIDAPI_SOURCES windows/hid.c)
+else()
+  message(FATAL_ERROR "hidapi does not support the platform ${CMAKE_SYSTEM_NAME}")
+endif()
+
+add_library(${target_name} STATIC
+  ${HIDAPI_SOURCES}
+)
+
+set_target_properties(${target_name} PROPERTIES DEBUG_POSTFIX d)
+
+install(TARGETS ${target_name} EXPORT SDL2Targets)
+install(FILES hidapi/hidapi.h DESTINATION include/hidapi)

@@ -1,5 +1,5 @@
 from conans import ConanFile, CMake, tools
-import os
+import os, shutil
 from cmake_utils import cmake_init, cmake_build_debug_release, cmake_install_debug_release
 
 class Conan(ConanFile):
@@ -14,7 +14,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     exports = "cmake_utils.py"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "HIDDeviceManager.diff"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "CMakeLists-hidapi.txt", "HIDDeviceManager.diff"]
     zip_folder_name = "SDL2-%s" % version
     zip_name = "%s.tar.gz" % zip_folder_name
     build_subfolder = "build"
@@ -36,6 +36,8 @@ class Conan(ConanFile):
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
+        
+        shutil.move("CMakeLists-hidapi.txt", os.path.join(self.source_subfolder, "src", "hidapi", "CMakeLists.txt"))
 
     def build(self):
         cmake = cmake_init(self.settings, CMake(self), self.build_folder)
@@ -49,11 +51,12 @@ class Conan(ConanFile):
         elif self.settings.compiler == "Visual Studio":
             self.copy(pattern="*.pdb", dst="lib", src="build/source/SDL2-static.dir/Release", keep_path=False)
             self.copy(pattern="*.pdb", dst="lib", src="build/source/SDL2main.dir/Release", keep_path=False)
+            self.copy(pattern="*.pdb", dst="lib", src="build/source/src/hidapi/hidapi.dir/Release", keep_path=False)
 
     def package_info(self):
         self.cpp_info.includedirs = [os.path.join("include", "SDL2"), os.path.join("include", "hidapi")]
-        self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
-        self.cpp_info.release.libs = ["SDL2", "SDL2main"]
+        self.cpp_info.debug.libs = ["SDL2d", "SDL2maind", "hidapid"]
+        self.cpp_info.release.libs = ["SDL2", "SDL2main", "hidapi"]
         if self.settings.os == "Windows":
             self.cpp_info.libs.extend(["imm32", "version", "winmm"])
         if self.settings.os == "Linux":
