@@ -20,6 +20,11 @@ add_library(${target_name} STATIC
   ${HIDAPI_SOURCES}
 )
 
+target_include_directories(${target_name} PUBLIC
+  $<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/src/hidapi/hidapi>
+  $<INSTALL_INTERFACE:include/hidapi>
+)
+
 set_target_properties(${target_name} PROPERTIES DEBUG_POSTFIX d)
 
 install(TARGETS ${target_name} EXPORT SDL2Targets)
