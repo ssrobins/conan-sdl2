@@ -1,6 +1,6 @@
 --- a/android-project/app/src/main/java/org/libsdl/app/HIDDeviceManager.java
 +++ b/android-project/app/src/main/java/org/libsdl/app/HIDDeviceManager.java
-@@ -103,36 +103,6 @@
+@@ -103,38 +103,12 @@
  
      private HIDDeviceManager(final Context context) {
          mContext = context;
@@ -22,7 +22,7 @@
 -                        // If our context is an activity, exit rather than crashing when we can't
 -                        // call our native functions.
 -                        Activity activity = (Activity)context;
--        
+         
 -                        activity.finish();
 -                    }
 -                    catch (ClassCastException cce) {
@@ -33,7 +33,13 @@
 -            builder.show();
 -
 -            return;
--        }
-         
-         HIDDeviceRegisterCallback();
++        try {
++            HIDDeviceRegisterCallback();
++        } catch (UnsatisfiedLinkError error) {
++            Log.v("SDL", "No implementation found for native library HIDDeviceRegisterCallback(). Only required if using hidapi.");
+         }
+-        
+-        HIDDeviceRegisterCallback();
  
+         mSharedPreferences = mContext.getSharedPreferences("hidapi", Context.MODE_PRIVATE);
+         mIsChromebook = mContext.getPackageManager().hasSystemFeature("org.chromium.arc.device_management");
