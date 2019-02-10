@@ -51,7 +51,7 @@ class Conan(ConanFile):
             self.copy(pattern="*.pdb", dst="lib", src="build/source/SDL2main.dir/Release", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.includedirs = [os.path.join("include", "SDL2")]
+        self.cpp_info.includedirs = [os.path.join("include", "SDL2"), os.path.join("include", "hidapi")]
         self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
         self.cpp_info.release.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
