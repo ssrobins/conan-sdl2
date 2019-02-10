@@ -1,7 +1,6 @@
 set(target_name hidapi)
 
-# Temporary
-message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+add_definitions(-DSDL_JOYSTICK_HIDAPI)
 
 if(ANDROID)
   set(HIDAPI_SOURCES android/hid.cpp)
