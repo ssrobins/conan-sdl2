@@ -71,7 +71,7 @@ class Conan(ConanFile):
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append("-framework %s" % framework)
         elif self.settings.os == "iOS":
-            frameworks = ["AVFoundation", "CoreBluetooth", "CoreGraphics", "CoreMotion", "Foundation", "GameController", "Metal", "OpenGLES", "QuartzCore", "UIKit", "CoreVideo", "IOKit", "CoreAudio", "AudioToolbox"]
+            frameworks = ["AudioToolbox", "AVFoundation", "CoreAudio", "CoreBluetooth", "CoreGraphics", "CoreMotion", "CoreVideo", "Foundation", "GameController", "IOKit", "Metal", "OpenGLES", "QuartzCore", "UIKit"]
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append("-framework %s" % framework)
         elif self.settings.os == "Android":
