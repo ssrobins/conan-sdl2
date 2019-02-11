@@ -22,7 +22,22 @@
  # TODO: Can't deactivate on FreeBSD? w/o LIBC, SDL_stdinc.h can't define
  # anything.
  if(LIBC)
-@@ -757,7 +765,10 @@
+@@ -744,8 +752,13 @@
+   endif()
+ endforeach()
+ if(SDL_JOYSTICK)
+-  file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/*.c)
++  set(SDL_JOYSTICK_HIDAPI 1)
++  file(GLOB JOYSTICK_SOURCES
++    ${SDL2_SOURCE_DIR}/src/joystick/*.c
++    ${SDL2_SOURCE_DIR}/src/joystick/hidapi/*.c)
+   set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
++  add_subdirectory(src/hidapi)
++  list(APPEND EXTRA_LIBS hidapi)
+ endif()
+ if(SDL_HAPTIC)
+   if(NOT SDL_JOYSTICK)
+@@ -757,7 +770,10 @@
  endif()
  if(SDL_SENSOR)
    file(GLOB SENSOR_SOURCES ${SDL2_SOURCE_DIR}/src/sensor/*.c)
@@ -34,7 +49,7 @@
  endif()
  if(SDL_POWER)
    file(GLOB POWER_SOURCES ${SDL2_SOURCE_DIR}/src/power/*.c)
-@@ -1482,7 +1493,7 @@
+@@ -1482,7 +1498,7 @@
      find_library(IOKIT IOKit)
      list(APPEND EXTRA_LIBS ${IOKIT})
    endif()
@@ -43,7 +58,7 @@
      find_library(FORCEFEEDBACK ForceFeedback)
      list(APPEND EXTRA_LIBS ${FORCEFEEDBACK})
    endif()
-@@ -1621,8 +1632,18 @@
+@@ -1621,8 +1637,18 @@
  #   endif()
  # endif()
  
@@ -64,17 +79,7 @@
  
  # Prepare the flags and remove duplicates
  if(EXTRA_LDFLAGS)
-@@ -1684,6 +1705,9 @@
-     "${SDL2_BINARY_DIR}/SDL2.spec" @ONLY)
- endif()
- 
-+add_subdirectory(src/hidapi)
-+list(APPEND EXTRA_LIBS hidapi)
-+
- ##### Info output #####
- message(STATUS "")
- message(STATUS "SDL2 was configured with the following options:")
-@@ -1734,8 +1758,20 @@
+@@ -1734,8 +1760,20 @@
  add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
  target_include_directories(SDL2main PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
  set(_INSTALL_LIBS "SDL2main")
@@ -97,7 +102,7 @@
  endif()
  
  if(SDL_SHARED)
-@@ -1764,8 +1800,9 @@
+@@ -1764,8 +1802,9 @@
    set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
    target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2 PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
@@ -109,7 +114,7 @@
    endif()
  endif()
  
-@@ -1790,8 +1827,9 @@
+@@ -1790,8 +1829,9 @@
    set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
    target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2-static PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)

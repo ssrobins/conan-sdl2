@@ -1,7 +1,5 @@
 set(target_name hidapi)
 
-add_definitions(-DSDL_JOYSTICK_HIDAPI)
-
 if(ANDROID)
   set(HIDAPI_SOURCES android/hid.cpp)
 elseif(IOS)
