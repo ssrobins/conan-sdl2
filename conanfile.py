@@ -61,7 +61,7 @@ class Conan(ConanFile):
         if self.settings.os == "Windows":
             self.cpp_info.libs.extend(["imm32", "setupapi", "version", "winmm"])
         if self.settings.os == "Linux":
-            system_libs = ["dl", "m", "pthread"]
+            system_libs = ["dl", "m", "pthread", "udev"]
             self.cpp_info.debug.libs.extend(system_libs)
             self.cpp_info.release.libs.extend(system_libs)
         elif self.settings.os == "Macos":
