@@ -14,7 +14,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     exports = "cmake_utils.py"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "CMakeLists-hidapi.txt", "HIDDeviceManager.diff", "SDL_config.h.diff"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "CMakeLists-hidapi.txt", "HIDDeviceManager.diff", "SDL_config.h.diff", "SDL_config_iphoneos.diff"]
     zip_folder_name = "SDL2-%s" % version
     zip_name = "%s.tar.gz" % zip_folder_name
     build_subfolder = "build"
@@ -37,6 +37,7 @@ class Conan(ConanFile):
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="SDL_config.h.diff")
+        tools.patch(base_path=self.source_subfolder, patch_file="SDL_config_iphoneos.diff")
         
         shutil.move("CMakeLists-hidapi.txt", os.path.join(self.source_subfolder, "src", "hidapi", "CMakeLists.txt"))
 
