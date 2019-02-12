@@ -79,7 +79,7 @@
  
  # Prepare the flags and remove duplicates
  if(EXTRA_LDFLAGS)
-@@ -1734,8 +1760,20 @@
+@@ -1734,8 +1760,25 @@
  add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
  target_include_directories(SDL2main PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
  set(_INSTALL_LIBS "SDL2main")
@@ -89,11 +89,16 @@
 +
 +if(IOS)
 +  set(IOS_FRAMEWORKS
++    "-framework AudioToolbox"
 +    "-framework AVFoundation"
++    "-framework CoreAudio"
++    "-framework CoreBluetooth"
 +    "-framework CoreGraphics"
 +    "-framework CoreMotion"
++    "-framework CoreVideo"
 +    "-framework Foundation"
 +    "-framework GameController"
++    "-framework IOKit"
 +    "-framework Metal"
 +    "-framework OpenGLES"
 +    "-framework QuartzCore"
@@ -102,7 +107,7 @@
  endif()
  
  if(SDL_SHARED)
-@@ -1764,8 +1802,9 @@
+@@ -1764,8 +1807,9 @@
    set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
    target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2 PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
@@ -114,7 +119,7 @@
    endif()
  endif()
  
-@@ -1790,8 +1829,9 @@
+@@ -1790,8 +1834,9 @@
    set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
    target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
    target_include_directories(SDL2-static PUBLIC "$<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/include>" $<INSTALL_INTERFACE:include/SDL2>)
