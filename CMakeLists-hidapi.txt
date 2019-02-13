@@ -8,8 +8,10 @@ elseif(APPLE)
   set(HIDAPI_SOURCES mac/hid.c)
 elseif(UNIX)
   set(HIDAPI_SOURCES linux/hid.c)
+  set(HIDAPI_EXTRA_LIBS udev)
 elseif(WIN32)
   set(HIDAPI_SOURCES windows/hid.c)
+  set(HIDAPI_EXTRA_LIBS setupapi)
 else()
   message(FATAL_ERROR "hidapi does not support the platform ${CMAKE_SYSTEM_NAME}")
 endif()
@@ -21,6 +23,10 @@ add_library(${target_name} STATIC
 target_include_directories(${target_name} PUBLIC
   $<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/src/hidapi/hidapi>
   $<INSTALL_INTERFACE:include/hidapi>
+)
+
+target_link_libraries(${target_name}
+  ${HIDAPI_EXTRA_LIBS}
 )
 
 set_target_properties(${target_name} PROPERTIES DEBUG_POSTFIX d)
