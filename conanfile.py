@@ -4,7 +4,7 @@ from cmake_utils import cmake_init, cmake_build_debug_release, cmake_install_deb
 
 class Conan(ConanFile):
     name = "sdl2"
-    version = os.getenv("package_version")
+    version = "2.0.9"
     description = "A cross-platform development library designed to provide low level " \
                   "access to audio, keyboard, mouse, joystick, and graphics hardware " \
                   "via OpenGL and Direct3D."
@@ -70,6 +70,10 @@ class Conan(ConanFile):
             frameworks = ["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback"]
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append("-framework %s" % framework)
+        elif self.settings.os == "Android":
+            system_libs = ["android", "GLESv2", "log"]
+            self.cpp_info.debug.libs.extend(system_libs)
+            self.cpp_info.release.libs.extend(system_libs)
         elif self.settings.os == "iOS":
             frameworks = ["AudioToolbox", "AVFoundation", "CoreAudio", "CoreBluetooth", "CoreGraphics", "CoreMotion", "CoreVideo", "Foundation", "GameController", "IOKit", "Metal", "OpenGLES", "QuartzCore", "UIKit"]
             for framework in frameworks:
