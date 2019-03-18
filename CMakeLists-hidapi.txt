@@ -2,6 +2,7 @@ set(target_name hidapi)
 
 if(ANDROID)
   set(HIDAPI_SOURCES android/hid.cpp)
+  set(HIDAPI_EXTRA_LIBS log)
 elseif(IOS)
   set(HIDAPI_SOURCES ios/hid.m)
 elseif(APPLE)
@@ -16,7 +17,7 @@ else()
   message(FATAL_ERROR "hidapi does not support the platform ${CMAKE_SYSTEM_NAME}")
 endif()
 
-add_library(${target_name} STATIC
+add_library(${target_name}
   ${HIDAPI_SOURCES}
 )
 
