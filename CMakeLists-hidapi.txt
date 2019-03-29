@@ -21,6 +21,10 @@ add_library(${target_name}
   ${HIDAPI_SOURCES}
 )
 
+target_include_directories(${target_name} PUBLIC
+  $<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/src/hidapi/hidapi>
+)
+
 target_link_libraries(${target_name}
   ${HIDAPI_EXTRA_LIBS}
 )
