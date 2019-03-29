@@ -21,11 +21,6 @@ add_library(${target_name}
   ${HIDAPI_SOURCES}
 )
 
-target_include_directories(${target_name} PUBLIC
-  $<BUILD_INTERFACE:${SDL2_SOURCE_DIR}/src/hidapi/hidapi>
-  $<INSTALL_INTERFACE:include/hidapi>
-)
-
 target_link_libraries(${target_name}
   ${HIDAPI_EXTRA_LIBS}
 )
@@ -33,4 +28,3 @@ target_link_libraries(${target_name}
 set_target_properties(${target_name} PROPERTIES DEBUG_POSTFIX d)
 
 install(TARGETS ${target_name} EXPORT SDL2Targets)
-install(FILES hidapi/hidapi.h DESTINATION include/hidapi)
