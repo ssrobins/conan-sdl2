@@ -2,10 +2,6 @@ set -e
   
 cd $(dirname "$0")
 
-CONAN_USERNAME=$(cat conan_user.txt)
+conan remote add bintray-stever https://api.bintray.com/conan/stever/conan --insert --force
 
-if [ -z "$CI_COMMIT_REF_NAME" ]; then
-    CI_COMMIT_REF_NAME=$(git rev-parse --abbrev-ref HEAD)
-fi
-
-conan create . $CONAN_USERNAME/$CI_COMMIT_REF_NAME
+conan create --update . -s os.version=10.9 -s compiler.version=11.0

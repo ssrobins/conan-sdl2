@@ -1,6 +1,5 @@
 from conans import ConanFile, CMake, tools
 import os, shutil
-from cmake_utils import cmake_init, cmake_build_debug_release, cmake_install_debug_release
 
 class Conan(ConanFile):
     name = "sdl2"
@@ -13,16 +12,22 @@ class Conan(ConanFile):
     url = "https://gitlab.com/ssrobins/conan-" + name
     settings = "os", "compiler", "arch"
     generators = "cmake"
-    exports = "cmake_utils.py"
+    revision_mode = "scm"
     exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "CMakeLists-hidapi.txt", "HIDDeviceManager.diff", "SDL_config.h.diff", "SDL_config_iphoneos.diff"]
     zip_folder_name = "SDL2-%s" % version
     zip_name = "%s.tar.gz" % zip_folder_name
     build_subfolder = "build"
     source_subfolder = "source"
 
+    def system_requirements(self):
+        if self.settings.os == "Linux":
+            installer = tools.SystemPackageTool()
+            installer.install("libasound2-dev")
+
+    def build_requirements(self):
+        self.build_requires.add("cmake_utils/0.3.1#1cf9333e6fba1b7350ec8d4d06f737b54d163eef")
+
     def source(self):
-        tools.download("https://gitlab.com/ssrobins/cmake-utils/raw/master/global_settings.cmake", "global_settings.cmake")
-        tools.download("https://gitlab.com/ssrobins/cmake-utils/raw/master/ios.toolchain.cmake", "ios.toolchain.cmake")
         tools.download("https://www.libsdl.org/release/%s" % self.zip_name, self.zip_name)
         tools.unzip(self.zip_name)
         os.unlink(self.zip_name)
@@ -42,18 +47,18 @@ class Conan(ConanFile):
         shutil.move("CMakeLists-hidapi.txt", os.path.join(self.source_subfolder, "src", "hidapi", "CMakeLists.txt"))
 
     def build(self):
+        from cmake_utils import cmake_init, cmake_build_debug_release
         cmake = cmake_init(self.settings, CMake(self), self.build_folder)
-        cmake_build_debug_release(cmake, self.build_subfolder)
+        cmake_build_debug_release(cmake, self.build_subfolder, self.run)
 
     def package(self):
+        from cmake_utils import cmake_init, cmake_install_debug_release
         cmake = cmake_init(self.settings, CMake(self), self.build_folder)
         cmake_install_debug_release(cmake, self.build_subfolder)
         if self.settings.os == "Android":
             self.copy("*.java", dst="android", src=os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
         elif self.settings.compiler == "Visual Studio":
-            self.copy(pattern="*.pdb", dst="lib", src="build/source/SDL2-static.dir/Release", keep_path=False)
-            self.copy(pattern="*.pdb", dst="lib", src="build/source/SDL2main.dir/Release", keep_path=False)
-            self.copy(pattern="*.pdb", dst="lib", src="build/source/src/hidapi/hidapi.dir/Release", keep_path=False)
+            self.copy("*.pdb", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.includedirs = [os.path.join("include", "SDL2"), os.path.join("include", "hidapi")]
