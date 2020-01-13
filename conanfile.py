@@ -23,6 +23,7 @@ class Conan(ConanFile):
         if self.settings.os == "Linux":
             installer = tools.SystemPackageTool()
             installer.install("libasound2-dev")
+            installer.install("libudev-dev")
 
     def build_requirements(self):
         self.build_requires.add("cmake_utils/0.3.1#1cf9333e6fba1b7350ec8d4d06f737b54d163eef")
