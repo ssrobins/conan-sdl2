@@ -3,7 +3,7 @@ import os
 
 class Conan(ConanFile):
     name = "sdl2"
-    version = "2.0.8"
+    version = "2.0.12"
     description = "A cross-platform development library designed to provide low level " \
                   "access to audio, keyboard, mouse, joystick, and graphics hardware " \
                   "via OpenGL and Direct3D."
@@ -37,7 +37,7 @@ class Conan(ConanFile):
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4195
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
-        tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
+        #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
