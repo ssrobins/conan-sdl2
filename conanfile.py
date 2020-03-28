@@ -58,7 +58,7 @@ class Conan(ConanFile):
         self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
         self.cpp_info.release.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
-            self.cpp_info.libs.extend(["imm32", "version", "winmm"])
+            self.cpp_info.libs.extend(["Imm32", "Version", "WinMM"])
         if self.settings.os == "Linux":
             system_libs = ["dl", "m", "pthread"]
             self.cpp_info.debug.libs.extend(system_libs)
