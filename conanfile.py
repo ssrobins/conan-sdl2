@@ -13,7 +13,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     revision_mode = "scm"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "override-CMakeLists.txt"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "override-CMakeLists.txt", "override-SDL_cpuinfo.c"]
     zip_folder_name = f"SDL2-{version}"
     zip_name = f"{zip_folder_name}.tar.gz"
     build_subfolder = "build"
@@ -34,11 +34,11 @@ class Conan(ConanFile):
         # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4143
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4178
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=4195
+
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
         #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         shutil.copy("override-CMakeLists.txt", os.path.join(self.source_subfolder, "CMakeLists.txt"))
+        shutil.copy("override-SDL_cpuinfo.c", os.path.join(self.source_subfolder, "src", "cpuinfo", "SDL_cpuinfo.c"))
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
