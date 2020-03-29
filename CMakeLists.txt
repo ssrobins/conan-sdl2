@@ -6,7 +6,7 @@ conan_basic_setup(TARGETS)
 include(${CONAN_CMAKE_UTILS_ROOT}/global_settings_thirdparty.cmake)
 
 option(SDL_SHARED "Build a shared version of the library" OFF)
-option(HIDAPI "" OFF)
+option(HIDAPI "Use HIDAPI for low level joystick drivers" OFF)
 
 if(ANDROID)
     option(SDL_STATIC_PIC "Static version of the library should be built with Position Independent Code" ON)
