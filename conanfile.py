@@ -13,7 +13,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     revision_mode = "scm"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "override-CMakeLists.txt", "override-HIDDeviceManager.java"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "override-CMakeLists.txt", "override-HIDDeviceManager.java", "override-SDL_config.h.cmake"]
     zip_folder_name = f"SDL2-{version}"
     zip_name = f"{zip_folder_name}.tar.gz"
     build_subfolder = "build"
@@ -39,6 +39,7 @@ class Conan(ConanFile):
         #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         shutil.copy("override-CMakeLists.txt", os.path.join(self.source_subfolder, "CMakeLists.txt"))
         shutil.copy("override-HIDDeviceManager.java", os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app", "HIDDeviceManager.java"))
+        shutil.copy("override-SDL_config.h.cmake", os.path.join(self.source_subfolder, "include", "SDL_config.h.cmake"))
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
