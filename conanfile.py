@@ -34,6 +34,8 @@ class Conan(ConanFile):
         # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4178
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
+        # https://bugzilla.libsdl.org/show_bug.cgi?id=5099
+        # https://bugzilla.libsdl.org/show_bug.cgi?id=5100
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="SDL_config.h.diff")
