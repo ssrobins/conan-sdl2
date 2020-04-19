@@ -1,0 +1,43 @@
+--- include/SDL_config.h.cmake	2020-03-10 18:36:18.000000000 -0700
++++ SDL_config.h.cmake	2020-04-12 14:51:34.000000000 -0700
+@@ -103,9 +103,11 @@
+ #cmakedefine HAVE_STRLEN 1
+ #cmakedefine HAVE_STRLCPY 1
+ #cmakedefine HAVE_STRLCAT 1
++#ifndef __IPHONEOS__
+ #cmakedefine HAVE__STRREV 1
+ #cmakedefine HAVE__STRUPR 1
+ #cmakedefine HAVE__STRLWR 1
++#endif
+ #cmakedefine HAVE_INDEX 1
+ #cmakedefine HAVE_RINDEX 1
+ #cmakedefine HAVE_STRCHR 1
+@@ -113,14 +115,18 @@
+ #cmakedefine HAVE_STRSTR 1
+ #cmakedefine HAVE_STRTOK_R 1
+ #cmakedefine HAVE_STRTOK_S 1
++#ifndef __IPHONEOS__
+ #cmakedefine HAVE_ITOA 1
+ #cmakedefine HAVE__LTOA 1
+ #cmakedefine HAVE__UITOA 1
+ #cmakedefine HAVE__ULTOA 1
++#endif
+ #cmakedefine HAVE_STRTOL 1
+ #cmakedefine HAVE_STRTOUL 1
++#ifndef __IPHONEOS__
+ #cmakedefine HAVE__I64TOA 1
+ #cmakedefine HAVE__UI64TOA 1
++#endif
+ #cmakedefine HAVE_STRTOLL 1
+ #cmakedefine HAVE_STRTOULL 1
+ #cmakedefine HAVE_STRTOD 1
+@@ -174,7 +180,9 @@
+ #cmakedefine HAVE_TANF 1
+ #cmakedefine HAVE_FOPEN64 1
+ #cmakedefine HAVE_FSEEKO 1
++#ifndef __IPHONEOS__
+ #cmakedefine HAVE_FSEEKO64 1
++#endif
+ #cmakedefine HAVE_SIGACTION 1
+ #cmakedefine HAVE_SA_SIGACTION 1
+ #cmakedefine HAVE_SETJMP 1
