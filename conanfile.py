@@ -32,9 +32,8 @@ class Conan(ConanFile):
         os.rename(self.zip_folder_name, self.source_subfolder)
         
         # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=4143
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4178
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
+        # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="SDL_config.h.diff")
