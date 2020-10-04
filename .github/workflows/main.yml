@@ -42,7 +42,8 @@ jobs:
             os: windows-2019
             script: .\build_windows.bat
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Print environment variables
         run: env
