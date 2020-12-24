@@ -3,7 +3,7 @@ import os
 
 class Conan(ConanFile):
     name = "sdl2"
-    version = "2.0.8"
+    version = "2.0.14"
     description = "A cross-platform development library designed to provide low level " \
                   "access to audio, keyboard, mouse, joystick, and graphics hardware " \
                   "via OpenGL and Direct3D."
@@ -37,7 +37,7 @@ class Conan(ConanFile):
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4195
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
-        tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
+        #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
@@ -58,7 +58,7 @@ class Conan(ConanFile):
         self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
         self.cpp_info.release.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
-            self.cpp_info.libs.extend(["imm32", "version", "winmm"])
+            self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
             system_libs = ["dl", "m", "pthread"]
             self.cpp_info.debug.libs.extend(system_libs)
