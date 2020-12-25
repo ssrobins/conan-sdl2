@@ -38,6 +38,7 @@ class Conan(ConanFile):
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4194
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4195
         # https://bugzilla.libsdl.org/show_bug.cgi?id=4419
+        # https://bugzilla.libsdl.org/show_bug.cgi?id=5415
         #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         shutil.copy("override-CMakeLists.txt", os.path.join(self.source_subfolder, "CMakeLists.txt"))
 
