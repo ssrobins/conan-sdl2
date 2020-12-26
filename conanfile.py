@@ -14,7 +14,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     revision_mode = "scm"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "override-CMakeLists.txt"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "HIDDeviceManager.diff", "override-CMakeLists.txt"]
     zip_folder_name = f"SDL2-{version}"
     zip_name = f"{zip_folder_name}.tar.gz"
     build_subfolder = "build"
@@ -35,6 +35,7 @@ class Conan(ConanFile):
         # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
         # https://bugzilla.libsdl.org/show_bug.cgi?id=5415
         #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
+        tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         shutil.copy("override-CMakeLists.txt", os.path.join(self.source_subfolder, "CMakeLists.txt"))
 
     def build(self):
