@@ -14,7 +14,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     revision_mode = "scm"
-    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "HIDDeviceManager.diff", "override-CMakeLists.txt"]
+    exports_sources = ["CMakeLists.diff", "CMakeLists.txt", "HIDDeviceManager.diff", "override-CMakeLists.txt", "SDL_uikitappdelegate.m"]
     zip_folder_name = f"SDL2-{version}"
     zip_name = f"{zip_folder_name}.tar.gz"
     build_subfolder = "build"
@@ -37,6 +37,7 @@ class Conan(ConanFile):
         #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         shutil.copy("override-CMakeLists.txt", os.path.join(self.source_subfolder, "CMakeLists.txt"))
+        shutil.copy("SDL_uikitappdelegate.m", os.path.join(self.source_subfolder, "src", "video", "uikit", "SDL_uikitappdelegate.m"))
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
