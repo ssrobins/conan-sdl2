@@ -1,5 +1,5 @@
---- android-project/app/src/main/java/org/libsdl/app/HIDDeviceManager.java	2020-03-10 18:36:18.000000000 -0700
-+++ HIDDeviceManager.java	2020-04-06 18:20:01.000000000 -0700
+--- android-project/app/src/main/java/org/libsdl/app/HIDDeviceManager.java
++++ HIDDeviceManager.java
 @@ -104,37 +104,11 @@
      private HIDDeviceManager(final Context context) {
          mContext = context;
