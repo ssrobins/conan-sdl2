@@ -16,6 +16,12 @@ endif()
 add_subdirectory(source)
 
 if(MSVC)
+    target_compile_definitions(SDL2-static
+      PRIVATE
+        # Work around error LNK2005: __ftol2_sse already defined in SDL2.lib(SDL_stdlib.obj)
+        HAVE_LIBC
+    )
+
     target_compile_options(SDL2-static
       PRIVATE
         /Fd$<TARGET_FILE_DIR:SDL2-static>/SDL2-static$<$<CONFIG:Debug>:d>.pdb
