@@ -8,7 +8,6 @@ on:
   workflow_dispatch:
 
 env:
-  CONAN_REVISIONS_ENABLED: 1
   CONAN_SYSREQUIRES_SUDO: 0
 
 jobs:
@@ -51,13 +50,22 @@ jobs:
       - name: Install Conan
         run: pip3 install conan --upgrade
 
+      - name: Customize Conan profile
+        if: contains(matrix.name, 'android')
+        run: |
+          conan profile new ~/.conan/profiles/default --detect
+          echo [conf]\\ntools.android:ndk_path=$ANDROID_NDK_ROOT >> ~/.conan/profiles/default
+          cat ~/.conan/profiles/default
+
       - name: Print versions
         run: |
           cmake --version
           conan --version
 
       - name: Build
-        run: ${{ matrix.script }}
+        run: |
+          ${{ matrix.script }} --config Debug
+          ${{ matrix.script }} --config Release
         env:
           DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 

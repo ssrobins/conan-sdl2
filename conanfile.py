@@ -1,4 +1,5 @@
-from conans import ConanFile, CMake, tools
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain
+from conans import ConanFile, tools
 import os
 import shutil
 
@@ -11,8 +12,8 @@ class Conan(ConanFile):
     homepage = "https://www.libsdl.org"
     license = "Zlib https://www.libsdl.org/license.php"
     url = f"https://github.com/ssrobins/conan-{name}"
-    settings = "os", "compiler", "arch"
-    generators = "cmake"
+    settings = "os", "compiler", "build_type", "arch"
+    generators = "CMakeDeps"
     revision_mode = "scm"
     exports_sources = [
         "CMakeLists.diff",
@@ -29,8 +30,8 @@ class Conan(ConanFile):
             installer = tools.SystemPackageTool()
             installer.install("libasound2-dev")
 
-    def build_requirements(self):
-        self.build_requires("cmake_utils/0.3.1#77d5f06b9b20302a5410e41ed45e7bbea7de90a5")
+    def layout(self):
+        self.folders.build = f"cmake-build-{str(self.settings.build_type).lower()}"
 
     def source(self):
         tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
@@ -43,15 +44,29 @@ class Conan(ConanFile):
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="SDL_uikitappdelegate.diff")
 
+    def generate(self):
+        tc = CMakeToolchain(self)
+        if self.settings.os == "Android":
+            tc.generator = "Ninja Multi-Config"
+        elif self.settings.os == "iOS":
+            tc.generator = "Xcode"
+            tc.variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = self.settings.os.version
+        elif self.settings.os == "Linux":
+            tc.generator = "Ninja Multi-Config"
+        elif self.settings.os == "Macos":
+            tc.generator = "Xcode"
+            tc.variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = self.settings.os.version
+        tc.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
+
     def build(self):
-        from cmake_utils import cmake_init, cmake_build_debug_release
-        cmake = cmake_init(self.settings, CMake(self), self.build_folder)
-        cmake_build_debug_release(cmake, self.build_subfolder, self.run)
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
+        cmake.install()
 
     def package(self):
-        from cmake_utils import cmake_init, cmake_install_debug_release
-        cmake = cmake_init(self.settings, CMake(self), self.build_folder)
-        cmake_install_debug_release(cmake, self.build_subfolder)
         if self.settings.os == "Android":
             self.copy("*.java", dst="android", src=os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
         elif self.settings.compiler == "Visual Studio":
@@ -59,25 +74,25 @@ class Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.includedirs = [os.path.join("include", "SDL2")]
-        self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
-        self.cpp_info.release.libs = ["SDL2", "SDL2main"]
+        if self.settings.build_type == "Debug":
+            self.cpp_info.libs = ["SDL2d", "SDL2maind"]
+        else:
+            self.cpp_info.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
             self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
-            system_libs = ["dl", "m", "pthread"]
-            self.cpp_info.debug.libs.extend(system_libs)
-            self.cpp_info.release.libs.extend(system_libs)
+            self.cpp_info.libs.extend(["dl", "m", "pthread"])
         elif self.settings.os == "Macos":
             self.cpp_info.libs.append("iconv")
             frameworks = ["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback"]
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append(f"-framework {framework}")
         elif self.settings.os == "Android":
-            self.cpp_info.debug.libs.append("hidapid")
-            self.cpp_info.release.libs.append("hidapi")
-            system_libs = ["android", "GLESv1_CM", "GLESv2", "log"]
-            self.cpp_info.debug.libs.extend(system_libs)
-            self.cpp_info.release.libs.extend(system_libs)
+            if self.settings.build_type == "Debug":
+                self.cpp_info.libs.append("hidapid")
+            else:
+                self.cpp_info.libs.append("hidapi")
+            self.cpp_info.libs.extend(["android", "GLESv1_CM", "GLESv2", "log"])
         elif self.settings.os == "iOS":
             self.cpp_info.libs.append("iconv")
             frameworks = ["AVFoundation", "CoreBluetooth", "CoreGraphics", "CoreHaptics", "CoreMotion", "Foundation", "GameController", "Metal", "OpenGLES", "QuartzCore", "UIKit", "CoreVideo", "IOKit", "CoreAudio", "AudioToolbox"]
