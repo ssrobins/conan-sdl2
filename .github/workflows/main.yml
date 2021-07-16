@@ -50,6 +50,10 @@ jobs:
       - name: Install Conan
         run: pip3 install conan --upgrade
 
+      - name: Install Ninja
+        if: matrix.name == 'ios' || matrix.name == 'macos'
+        run: brew install ninja
+
       - name: Customize Conan profile
         if: contains(matrix.name, 'android')
         run: |
