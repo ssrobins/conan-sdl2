@@ -46,15 +46,10 @@ class Conan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        if self.settings.os == "Android":
-            tc.generator = "Ninja Multi-Config"
-        elif self.settings.os == "iOS":
-            tc.generator = "Xcode"
+        tc.generator = "Ninja Multi-Config"
+        if self.settings.os == "iOS":
             tc.variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = self.settings.os.version
-        elif self.settings.os == "Linux":
-            tc.generator = "Ninja Multi-Config"
         elif self.settings.os == "Macos":
-            tc.generator = "Xcode"
             tc.variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = self.settings.os.version
         tc.generate()
         deps = CMakeDeps(self)
@@ -79,24 +74,18 @@ class Conan(ConanFile):
         else:
             self.cpp_info.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
-            self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
+            self.cpp_info.system_libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
-            self.cpp_info.libs.extend(["dl", "m", "pthread"])
+            self.cpp_info.system_libs.extend(["dl", "m", "pthread"])
         elif self.settings.os == "Macos":
-            self.cpp_info.libs.append("iconv")
-            frameworks = ["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback"]
-            for framework in frameworks:
-                self.cpp_info.exelinkflags.append(f"-framework {framework}")
+            self.cpp_info.system_libs.append("iconv")
+            self.cpp_info.frameworks.extend(["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback", "Metal"])
         elif self.settings.os == "Android":
             if self.settings.build_type == "Debug":
                 self.cpp_info.libs.append("hidapid")
             else:
                 self.cpp_info.libs.append("hidapi")
-            self.cpp_info.libs.extend(["android", "GLESv1_CM", "GLESv2", "log"])
+            self.cpp_info.system_libs.extend(["android", "GLESv1_CM", "GLESv2", "log"])
         elif self.settings.os == "iOS":
-            self.cpp_info.libs.append("iconv")
-            frameworks = ["AVFoundation", "CoreBluetooth", "CoreGraphics", "CoreHaptics", "CoreMotion", "Foundation", "GameController", "Metal", "OpenGLES", "QuartzCore", "UIKit", "CoreVideo", "IOKit", "CoreAudio", "AudioToolbox"]
-            for framework in frameworks:
-                self.cpp_info.exelinkflags.append(f"-framework {framework}")
-        elif self.settings.os == "Android":
-            self.cpp_info.libs.extend(["android"])
+            self.cpp_info.system_libs.append("iconv")
+            self.cpp_info.frameworks.extend(["AVFoundation", "CoreBluetooth", "CoreGraphics", "CoreHaptics", "CoreMotion", "Foundation", "GameController", "Metal", "OpenGLES", "QuartzCore", "UIKit", "CoreVideo", "IOKit", "CoreAudio", "AudioToolbox"])
