@@ -4,7 +4,7 @@ import shutil
 
 class Conan(ConanFile):
     name = "sdl2"
-    version = "2.0.14"
+    version = "2.0.16"
     description = "A cross-platform development library designed to provide low level " \
                   "access to audio, keyboard, mouse, joystick, and graphics hardware " \
                   "via OpenGL and Direct3D."
@@ -39,9 +39,9 @@ class Conan(ConanFile):
         # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
         # https://bugzilla.libsdl.org/show_bug.cgi?id=5415
         # https://bugzilla.libsdl.org/show_bug.cgi?id=5417
-        tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
-        tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
-        tools.patch(base_path=self.source_subfolder, patch_file="SDL_uikitappdelegate.diff")
+        #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
+        #tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
+        #tools.patch(base_path=self.source_subfolder, patch_file="SDL_uikitappdelegate.diff")
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
