@@ -34,7 +34,7 @@
 -            return;
 +            HIDDeviceRegisterCallback();
 +        } catch (UnsatisfiedLinkError error) {
-++           Log.v("SDL", "No implementation found for native library HIDDeviceRegisterCallback(). Was SDL_JOYSTICK_HIDAPI enabled when building SDL?");
++            Log.v("SDL", "No implementation found for native library HIDDeviceRegisterCallback(). Was SDL_JOYSTICK_HIDAPI enabled when building SDL?");
          }
 -        
 -        HIDDeviceRegisterCallback();
