@@ -69,7 +69,7 @@ class Conan(ConanFile):
             self.cpp_info.release.libs.extend(system_libs)
         elif self.settings.os == "Macos":
             self.cpp_info.libs.append("iconv")
-            frameworks = ["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback"]
+            frameworks = ["Cocoa", "Carbon", "IOKit", "CoreVideo", "CoreAudio", "AudioToolbox", "ForceFeedback", "Metal"]
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append(f"-framework {framework}")
         elif self.settings.os == "Android":
