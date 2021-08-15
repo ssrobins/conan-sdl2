@@ -37,7 +37,7 @@ class Conan(ConanFile):
         os.rename(self.zip_folder_name, self.source_subfolder)
 
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
-        #tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
+        tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
