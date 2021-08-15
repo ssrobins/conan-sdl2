@@ -15,7 +15,9 @@ endif()
 
 add_subdirectory(source)
 
-set_target_properties(hidapi PROPERTIES DEBUG_POSTFIX "d")
+if(ANDROID)
+    set_target_properties(hidapi PROPERTIES DEBUG_POSTFIX "d")
+endif()
 set_target_properties(SDL2-static PROPERTIES DEBUG_POSTFIX "d")
 set_target_properties(SDL2main PROPERTIES DEBUG_POSTFIX "d")
 
