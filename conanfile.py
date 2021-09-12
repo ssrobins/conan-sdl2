@@ -48,8 +48,6 @@ class Conan(ConanFile):
         tc = CMakeToolchain(self)
         tc.generator = "Ninja Multi-Config"
         tc.variables["CMAKE_VERBOSE_MAKEFILE"] = "TRUE"
-        if self.settings.os == "iOS" or self.settings.os == "Macos":
-            tc.variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = self.settings.os.version
         tc.generate()
         deps = CMakeDeps(self)
         deps.generate()
