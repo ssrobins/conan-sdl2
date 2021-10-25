@@ -78,7 +78,7 @@ class Conan(ConanFile):
                 self.cpp_info.libs.append("hidapid")
             else:
                 self.cpp_info.libs.append("hidapi")
-            self.cpp_info.system_libs.extend(["android", "GLESv1_CM", "GLESv2", "log"])
+            self.cpp_info.system_libs.extend(["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"])
         elif self.settings.os == "iOS":
             self.cpp_info.system_libs.append("iconv")
             self.cpp_info.frameworks.extend(["AVFoundation", "CoreBluetooth", "CoreGraphics", "CoreHaptics", "CoreMotion", "Foundation", "GameController", "Metal", "OpenGLES", "QuartzCore", "UIKit", "CoreVideo", "IOKit", "CoreAudio", "AudioToolbox"])
