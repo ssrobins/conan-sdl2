@@ -55,13 +55,6 @@ jobs:
         if: matrix.name == 'ios' || matrix.name == 'macos'
         run: brew install ninja
 
-      - name: Customize Conan profile
-        if: contains(matrix.name, 'android')
-        run: |
-          conan profile new ~/.conan/profiles/default --detect
-          echo [conf]\\ntools.android:ndk_path=$ANDROID_NDK_ROOT >> ~/.conan/profiles/default
-          cat ~/.conan/profiles/default
-
       - name: Print versions
         run: |
           cmake --version
@@ -70,6 +63,15 @@ jobs:
       - name: Set Android NDK
         if: contains(matrix.name, 'android')
         run: echo "ANDROID_NDK_ROOT=$ANDROID_NDK_LATEST_HOME" >> $GITHUB_ENV
+
+      - name: Customize Conan profile
+        if: contains(matrix.name, 'android')
+        run: |
+          conan_default_profile=~/.conan/profiles/default
+          conan profile new $conan_default_profile --detect
+          echo "[conf]" >> $conan_default_profile
+          echo "tools.android:ndk_path=$ANDROID_NDK_ROOT" >> $conan_default_profile
+          cat $conan_default_profile
 
       - name: Build
         run: |
