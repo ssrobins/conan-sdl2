@@ -5,7 +5,7 @@ import shutil
 
 class Conan(ConanFile):
     name = "sdl2"
-    version = "2.0.14"
+    version = "2.0.16"
     description = "A cross-platform development library designed to provide low level " \
                   "access to audio, keyboard, mouse, joystick, and graphics hardware " \
                   "via OpenGL and Direct3D."
@@ -36,13 +36,9 @@ class Conan(ConanFile):
     def source(self):
         tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
         os.rename(self.zip_folder_name, self.source_subfolder)
-        
-        # Apply a patch to the SDL2 CMakeLists.txt file with the following changes:
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=5415
-        # https://bugzilla.libsdl.org/show_bug.cgi?id=5417
+
         tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
         tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
-        tools.patch(base_path=self.source_subfolder, patch_file="SDL_uikitappdelegate.diff")
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -59,6 +55,9 @@ class Conan(ConanFile):
         cmake.install()
 
     def package(self):
+        from cmake_utils import cmake_init, cmake_install_debug_release
+        cmake = cmake_init(self.settings, CMake(self), self.build_folder)
+        cmake_install_debug_release(cmake, self.build_subfolder)
         if self.settings.os == "Android":
             self.copy("*.java", dst="android", src=os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
         elif self.settings.compiler == "Visual Studio":

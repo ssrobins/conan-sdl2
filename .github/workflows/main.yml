@@ -9,7 +9,6 @@ on:
 
 env:
   CONAN_REVISIONS_ENABLED: 1
-  CONAN_SYSREQUIRES_SUDO: 0
 
 jobs:
   builds:
@@ -22,21 +21,18 @@ jobs:
         include:
           - name: androidarm
             os: ubuntu-20.04
-            container: ghcr.io/ssrobins/docker-android-build:jdk8u292-ndk22b
             script: ./conan.py androidarm
           - name: androidarm64
             os: ubuntu-20.04
-            container: ghcr.io/ssrobins/docker-android-build:jdk8u292-ndk22b
             script: ./conan.py androidarm64
           - name: ios
-            os: macos-10.15
+            os: macos-11
             script: ./conan.py ios
           - name: linux
-            os: ubuntu-20.04
-            container: ghcr.io/ssrobins/docker-linux-build:gcc11.1.0
+            os: ubuntu-18.04
             script: ./conan.py linux
           - name: macos
-            os: macos-10.15
+            os: macos-11
             script: ./conan.py macos
           - name: windows
             os: windows-2019
@@ -47,6 +43,10 @@ jobs:
 
       - name: Print environment variables
         run: env
+
+      - name: Install required Linux packages
+        if: contains(matrix.name, 'android') || matrix.name == 'linux'
+        run: sudo apt-get install ninja-build python3-setuptools -y
 
       - name: Install Conan
         run: pip3 install conan --upgrade
@@ -67,12 +67,16 @@ jobs:
           cmake --version
           conan --version
 
+      - name: Set Android NDK
+        if: contains(matrix.name, 'android')
+        run: echo "ANDROID_NDK_ROOT=$ANDROID_NDK_LATEST_HOME" >> $GITHUB_ENV
+
       - name: Build
         run: |
           ${{ matrix.script }} --config Debug
           ${{ matrix.script }} --config Release
         env:
-          DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
+          DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
 
       - name: Conan package upload
         if: github.ref == 'refs/heads/conan_v2'
