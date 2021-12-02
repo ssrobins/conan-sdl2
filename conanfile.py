@@ -68,8 +68,6 @@ class Conan(ConanFile):
             for framework in frameworks:
                 self.cpp_info.exelinkflags.append(f"-framework {framework}")
         elif self.settings.os == "Android":
-            self.cpp_info.debug.libs.append("hidapid")
-            self.cpp_info.release.libs.append("hidapi")
             system_libs = ["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"]
             self.cpp_info.debug.libs.extend(system_libs)
             self.cpp_info.release.libs.extend(system_libs)
