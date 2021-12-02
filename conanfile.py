@@ -69,8 +69,10 @@ class Conan(ConanFile):
                 "Carbon",
                 "Cocoa",
                 "CoreAudio",
+                "CoreHaptics",
                 "CoreVideo",
                 "ForceFeedback",
+                "GameController",
                 "IOKit",
                 "Metal"])
         elif self.settings.os == "Android":
