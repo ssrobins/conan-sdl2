@@ -14,10 +14,7 @@ class Conan(ConanFile):
     settings = "os", "compiler", "arch"
     generators = "cmake"
     revision_mode = "scm"
-    exports_sources = [
-        "CMakeLists.diff",
-        "CMakeLists.txt",
-        "HIDDeviceManager.diff"]
+    exports_sources = ["CMakeLists.txt"]
     zip_folder_name = f"SDL2-{version}"
     zip_name = f"{zip_folder_name}.tar.gz"
     build_subfolder = "build"
@@ -34,9 +31,6 @@ class Conan(ConanFile):
     def source(self):
         tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
         os.rename(self.zip_folder_name, self.source_subfolder)
-
-        #tools.patch(base_path=self.source_subfolder, patch_file="CMakeLists.diff")
-        #tools.patch(base_path=self.source_subfolder, patch_file="HIDDeviceManager.diff")
 
     def build(self):
         from cmake_utils import cmake_init, cmake_build_debug_release
