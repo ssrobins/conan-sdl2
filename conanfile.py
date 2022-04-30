@@ -39,6 +39,9 @@ class Conan(ConanFile):
         self._cmake = CMake(self)
         self._cmake.generator = "Ninja Multi-Config"
 
+        if self.settings.os == "Android":
+            self._cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = os.getenv("ANDROID_NDK_ROOT") + "/build/cmake/android.toolchain.cmake"
+
         if self.settings.os == "iOS" and self.settings.arch != "x86_64":
             self._cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = "armv7;arm64"
 
