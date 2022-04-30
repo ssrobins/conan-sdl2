@@ -11,8 +11,9 @@ class Conan(ConanFile):
     homepage = "https://www.libsdl.org"
     license = "Zlib https://www.libsdl.org/license.php"
     url = f"https://github.com/ssrobins/conan-{name}"
-    settings = "os", "compiler", "arch"
+    settings = "os", "arch", "compiler", "build_type"
     generators = "cmake"
+    _cmake = None
     revision_mode = "scm"
     exports_sources = ["CMakeLists.txt"]
     zip_folder_name = f"SDL2-{version}"
@@ -32,15 +33,24 @@ class Conan(ConanFile):
         tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
         os.rename(self.zip_folder_name, self.source_subfolder)
 
+    def _configure_cmake(self):
+        if self._cmake:
+            return self._cmake
+        self._cmake = CMake(self)
+        self._cmake.generator = "Ninja Multi-Config"
+
+        if self.settings.os == "iOS" and self.settings.arch != "x86_64":
+            self._cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = "armv7;arm64"
+
+        self._cmake.configure(build_dir=self.build_subfolder)
+        return self._cmake
+
     def build(self):
-        from cmake_utils import cmake_init, cmake_build_debug_release
-        cmake = cmake_init(self.settings, CMake(self), self.build_folder)
-        cmake_build_debug_release(cmake, self.build_subfolder, self.run)
+        cmake = self._configure_cmake()
+        cmake.build(args=["--verbose"])
+        cmake.install()
 
     def package(self):
-        from cmake_utils import cmake_init, cmake_install_debug_release
-        cmake = cmake_init(self.settings, CMake(self), self.build_folder)
-        cmake_install_debug_release(cmake, self.build_subfolder)
         if self.settings.os == "Android":
             self.copy("*.java", dst="android", src=os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
         elif self.settings.compiler == "msvc":
