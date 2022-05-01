@@ -52,6 +52,10 @@ jobs:
         if: matrix.name == 'ios' || matrix.name == 'macos'
         run: brew install ninja
 
+      - name: Install required Windows packages
+        if: matrix.name == 'windows'
+        run: choco install ninja
+
       - name: Install Conan
         run: pip3 install conan --upgrade
 
