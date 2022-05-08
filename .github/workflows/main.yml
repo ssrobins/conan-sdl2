@@ -76,7 +76,7 @@ jobs:
           DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
 
       - name: Conan package upload
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/separate_configs'
         run: |
           conan user --password ${{ secrets.ARTIFACTORY_API_KEY }} --remote artifactory-ssrobins ${{ secrets.ARTIFACTORY_USER }}
           conan upload $(conan inspect --raw name .) --all --remote artifactory-ssrobins --confirm --parallel
