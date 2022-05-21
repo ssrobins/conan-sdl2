@@ -71,7 +71,7 @@ class Conan(ConanFile):
             self.cpp_info.release.libs.extend(system_libs)
         elif self.settings.os == "Macos":
             self.cpp_info.libs.append("iconv")
-            self.cpp_info.frameworks.extend([
+            self.cpp_info.frameworks = [
                 "AudioToolbox",
                 "Carbon",
                 "Cocoa",
@@ -81,14 +81,14 @@ class Conan(ConanFile):
                 "ForceFeedback",
                 "GameController",
                 "IOKit",
-                "Metal"])
+                "Metal"]
         elif self.settings.os == "Android":
             system_libs = ["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"]
             self.cpp_info.debug.libs.extend(system_libs)
             self.cpp_info.release.libs.extend(system_libs)
         elif self.settings.os == "iOS":
             self.cpp_info.libs.append("iconv")
-            self.cpp_info.frameworks.extend([
+            self.cpp_info.frameworks = [
                 "AudioToolbox",
                 "AVFoundation",
                 "CoreAudio",
@@ -103,6 +103,6 @@ class Conan(ConanFile):
                 "Metal",
                 "OpenGLES",
                 "QuartzCore",
-                "UIKit"])
+                "UIKit"]
         elif self.settings.os == "Android":
             self.cpp_info.libs.extend(["android"])
