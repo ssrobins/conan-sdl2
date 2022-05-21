@@ -61,8 +61,10 @@ class Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.includedirs = [os.path.join("include", "SDL2")]
-        self.cpp_info.debug.libs = ["SDL2d", "SDL2maind"]
-        self.cpp_info.release.libs = ["SDL2", "SDL2main"]
+        if self.settings.build_type == "Debug":
+            self.cpp_info.libs = ["SDL2d", "SDL2maind"]
+        else:
+            self.cpp_info.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
             self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
