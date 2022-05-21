@@ -68,9 +68,7 @@ class Conan(ConanFile):
         if self.settings.os == "Windows":
             self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
-            system_libs = ["dl", "m", "pthread"]
-            self.cpp_info.debug.libs.extend(system_libs)
-            self.cpp_info.release.libs.extend(system_libs)
+            self.cpp_info.libs.extend(["dl", "m", "pthread"])
         elif self.settings.os == "Macos":
             self.cpp_info.libs.append("iconv")
             self.cpp_info.frameworks.extend([
@@ -85,9 +83,7 @@ class Conan(ConanFile):
                 "IOKit",
                 "Metal"])
         elif self.settings.os == "Android":
-            system_libs = ["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"]
-            self.cpp_info.debug.libs.extend(system_libs)
-            self.cpp_info.release.libs.extend(system_libs)
+            self.cpp_info.libs.extend(["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"])
         elif self.settings.os == "iOS":
             self.cpp_info.libs.append("iconv")
             self.cpp_info.frameworks.extend([
