@@ -102,5 +102,3 @@ class Conan(ConanFile):
                 "OpenGLES",
                 "QuartzCore",
                 "UIKit"])
-        elif self.settings.os == "Android":
-            self.cpp_info.libs.extend(["android"])
