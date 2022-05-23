@@ -27,7 +27,7 @@ class Conan(ConanFile):
             installer.install("libasound2-dev")
 
     def build_requirements(self):
-        self.build_requires("cmake_utils/3.0.0#4e7b4d9bfca394477325cdfc8eacce8b1c82583e")
+        self.build_requires("cmake_utils/7.0.0#9bf47716aeee70a8dcfc8592831a0318eb327a09")
 
     def source(self):
         tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
@@ -39,16 +39,12 @@ class Conan(ConanFile):
         self._cmake = CMake(self)
         if self.settings.os != "Windows":
             self._cmake.generator = "Ninja Multi-Config"
-
         if self.settings.os == "Android":
             self._cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = os.getenv("ANDROID_NDK_ROOT") + "/build/cmake/android.toolchain.cmake"
-
-        if self.settings.os == "iOS" and self.settings.arch != "x86_64":
+        elif self.settings.os == "iOS" and self.settings.arch != "x86_64":
             self._cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = "armv7;arm64"
-
-        if self.settings.os == "Windows" and self.settings.arch == "x86":
+        elif self.settings.os == "Windows" and self.settings.arch == "x86":
             self._cmake.generator_platform = "Win32"
-
         self._cmake.configure(build_dir=self.build_subfolder)
         return self._cmake
 
