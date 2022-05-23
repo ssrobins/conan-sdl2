@@ -46,6 +46,9 @@ class Conan(ConanFile):
         if self.settings.os == "iOS" and self.settings.arch != "x86_64":
             self._cmake.definitions["CMAKE_OSX_ARCHITECTURES"] = "armv7;arm64"
 
+        if self.settings.os == "Windows" and self.settings.arch == "x86":
+            self._cmake.generator_platform = "Win32"
+
         self._cmake.configure(build_dir=self.build_subfolder)
         return self._cmake
 
