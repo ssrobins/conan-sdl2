@@ -51,6 +51,8 @@ class Conan(ConanFile):
     def build(self):
         cmake = self._configure_cmake()
         cmake.build(args=["--verbose"])
+        with tools.chdir(self.build_subfolder):
+            self.run(f"ctest -C {self.settings.build_type} --output-on-failure")
         cmake.install()
 
     def package(self):
