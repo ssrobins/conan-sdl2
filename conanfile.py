@@ -70,11 +70,11 @@ class Conan(ConanFile):
         else:
             self.cpp_info.libs = ["SDL2", "SDL2main"]
         if self.settings.os == "Windows":
-            self.cpp_info.libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
+            self.cpp_info.system_libs.extend(["Imm32", "SetupAPI", "Version", "WinMM"])
         if self.settings.os == "Linux":
-            self.cpp_info.libs.extend(["dl", "m", "pthread"])
+            self.cpp_info.system_libs.extend(["dl", "m", "pthread"])
         elif self.settings.os == "Macos":
-            self.cpp_info.libs.append("iconv")
+            self.cpp_info.system_libs.append("iconv")
             self.cpp_info.frameworks.extend([
                 "AudioToolbox",
                 "Carbon",
@@ -87,9 +87,9 @@ class Conan(ConanFile):
                 "IOKit",
                 "Metal"])
         elif self.settings.os == "Android":
-            self.cpp_info.libs.extend(["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"])
+            self.cpp_info.system_libs.extend(["android", "GLESv1_CM", "GLESv2", "log", "OpenSLES"])
         elif self.settings.os == "iOS":
-            self.cpp_info.libs.append("iconv")
+            self.cpp_info.system_libs.append("iconv")
             self.cpp_info.frameworks.extend([
                 "AudioToolbox",
                 "AVFoundation",
