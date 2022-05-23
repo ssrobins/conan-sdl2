@@ -37,7 +37,8 @@ class Conan(ConanFile):
         if self._cmake:
             return self._cmake
         self._cmake = CMake(self)
-        self._cmake.generator = "Ninja Multi-Config"
+        if self.settings.os != "Windows":
+            self._cmake.generator = "Ninja Multi-Config"
 
         if self.settings.os == "Android":
             self._cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = os.getenv("ANDROID_NDK_ROOT") + "/build/cmake/android.toolchain.cmake"
