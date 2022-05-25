@@ -58,7 +58,7 @@ class Conan(ConanFile):
 
     def package(self):
         if self.settings.os == "Android":
-            self.copy("*.java", dst="android", src=os.path.join(self.source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
+            self.copy("*.java", dst="android", src=os.path.join(self._source_subfolder, "android-project", "app", "src", "main", "java", "org", "libsdl", "app"))
         elif self.settings.compiler == "msvc":
             self.copy("*.pdb", dst="lib", keep_path=False)
 
