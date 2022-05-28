@@ -30,8 +30,9 @@ class Conan(ConanFile):
         self.build_requires("cmake_utils/7.0.0#9bf47716aeee70a8dcfc8592831a0318eb327a09")
 
     def source(self):
-        tools.get(f"https://www.libsdl.org/release/{self.zip_name}")
-        os.rename(self.zip_folder_name, self.source_subfolder)
+        tools.get(f"https://www.libsdl.org/release/{self.zip_name}",
+            destination=self.source_subfolder,
+            strip_root=True)
 
     def _configure_cmake(self):
         if self._cmake:
