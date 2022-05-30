@@ -43,8 +43,10 @@ class Conan(ConanFile):
         tc = CMakeToolchain(self)
         tc.generator = "Ninja Multi-Config"
         tc.variables["CMAKE_VERBOSE_MAKEFILE"] = "TRUE"
-        if self.settings.os == "iOS" and self.settings.arch != "x86_64":
-            tc.blocks["apple_system"].values["cmake_osx_architectures"] = "armv7;arm64"
+        if self.settings.os == "iOS":
+            tc.variables["CMAKE_SYSTEM_NAME"] = "iOS"
+            if self.settings.arch != "x86_64":
+                tc.blocks["apple_system"].values["cmake_osx_architectures"] = "armv7;arm64"
         tc.generate()
         deps = CMakeDeps(self)
         deps.generate()
